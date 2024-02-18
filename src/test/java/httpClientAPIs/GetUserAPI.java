@@ -1,6 +1,7 @@
 package httpClientAPIs;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.ParseException;
@@ -12,6 +13,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+//import io.restassured.path.json.JsonPath;
 
 public class GetUserAPI {
 
@@ -52,7 +57,14 @@ public class GetUserAPI {
 			e.printStackTrace();
 		}
 		System.out.println(responseBody);
+		//get json value using rest assured JsonPath:
+		//JsonPath js = new JsonPath(responseBody);
+		//System.out.println(js.getString());
 		
+		//get json value using jayway JsonPath API:
+		Object document = Configuration.defaultConfiguration().jsonProvider().parse(responseBody);
+		List<String> result = JsonPath.read(document, "$..email");
+		System.out.println(result);
 	}
 	
 }
