@@ -2,6 +2,7 @@ package httpClientAPIs;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.ParseException;
@@ -17,6 +18,8 @@ import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
 
 public class PostUserAPI {
 
@@ -33,7 +36,7 @@ public class PostUserAPI {
 		postRequest.setHeader("Content-Type", "application/json");
 		
 		//3. convert pojo to json string:
-		User user = new User("Debasmita", "debasmitatest@gmail.com", "female", "inactive");
+		User user = new User("Debasmita", "debasmitatest8@gmail.com", "female", "inactive");
 		
 		//convert Java POJO to JSON --Serialization - Jackson API:
 		ObjectMapper mapper = new ObjectMapper();
@@ -81,5 +84,10 @@ public class PostUserAPI {
 			e.printStackTrace();
 		}
 		System.out.println(responseBody);
+		
+		//8. get the id from the response
+		Object document = Configuration.defaultConfiguration().jsonProvider().parse(responseBody);
+		List<Object> result = JsonPath.read(document, "$..id");
+		System.out.println("user id is : "+ result.get(0));
 	}
 }
